@@ -1,11 +1,9 @@
 package com.example.banking.service;
 
-import com.example.banking.model.entity.Loan;
-
 import java.util.List;
 import java.util.Optional;
 
-public interface AbstractLoanService<T> {
+public interface AbstractCreditCardService<T> {
     Optional<T> get(long id);
 
     List<T> getAll();
@@ -16,6 +14,5 @@ public interface AbstractLoanService<T> {
 
     void delete(T t);
 
-    List<T> findLoanByClientId(String clientId);
-
+    List<T> findCreditCardByClientId(String clientId);
 }

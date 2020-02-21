@@ -40,7 +40,7 @@ public class LoanService implements AbstractLoanService<Loan> {
         loanDao.delete(loan);
     }
 
-    public Loan findLoanByClientId(String clientId) {
+    public List<Loan> findLoanByClientId(String clientId) {
         return loanDao.findByClientId(clientId);
     }
 }

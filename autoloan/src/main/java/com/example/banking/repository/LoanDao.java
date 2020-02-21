@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface LoanDao extends CrudRepository<Loan, Long> {
-    Loan findByClientId(String clientId);
+    List<Loan> findByClientId(String clientId);
 }
