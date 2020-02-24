@@ -1,5 +1,5 @@
 Employee ID:857812
-Design Pattern Implemented in the Project: Template, Adapter (DTO) and Builder Design
+Design Pattern Implemented in the Project: Template, DTO and Builder Design
 Architectural Design Pattern: MVC
 Notes: I was able to implement all required Rest APIs for Deposit, Autoloan, and CreditCard micro-services.
 I was only able to implement the Builder and adapter pattern in Auto Loan services. Also, Orchestrator service is yet to

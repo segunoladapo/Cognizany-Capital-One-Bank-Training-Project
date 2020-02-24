@@ -5,6 +5,7 @@ import com.example.banking.model.GenericRestResponse;
 import com.example.banking.model.dto.LoanDto;
 import com.example.banking.model.entity.Loan;
 import com.example.banking.service.LoanService;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class LoanController {
 
 
     @PostMapping
-    // @HystrixCommand(fallbackMethod = "raisedExceptionFallBackMethod")
+    @HystrixCommand(fallbackMethod = "raisedExceptionFallBackMethod")
     public Loan saveLoan(@RequestBody LoanDto loanDto) {
         Loan newLoan = new Loan.LoanBuilder()
                 .setBalance(loanDto.getBalance())
