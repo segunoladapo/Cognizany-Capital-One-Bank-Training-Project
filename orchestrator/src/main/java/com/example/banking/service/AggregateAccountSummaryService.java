@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,24 +32,63 @@ public class AggregateAccountSummaryService {
     }
 
     public AccountSummary retrieveAccountSummaryByClientId(String clientId) {
+        List<Object> autoLoanAccountResult = findAutoloanAccountByClientId(clientId);
+        List<Object> depositLoanAccountResult = findDepositAccountByClientId(clientId);
+        List<Object> creditCardAccountResult = findCreditCardByClientId(clientId);
+        AccountSummary accountSummary = new AccountSummary();
+        accountSummary.setAutoLoanAccounts(autoLoanAccountResult);
+        accountSummary.setCreditAccounts(creditCardAccountResult);
+        accountSummary.setDepositAccounts(depositLoanAccountResult);
+        return accountSummary;
+    }
 
+
+    private List<Object> findDepositAccountByClientId(String clientId) {
+        List<Object> result;
+        try {
+            ResponseEntity<List<DepositAccounts>> depositAccountsResponse =
+                    restTemplate.exchange(String.format(depositAccountEndpoint, clientId),
+                            HttpMethod.GET, null, new ParameterizedTypeReference<List<DepositAccounts>>() {
+                            });
+            return (List) depositAccountsResponse.getBody();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            result = new ArrayList<>();
+            result.add("No accounts available to show currently");
+            return result;
+        }
+    }
+
+
+    private List<Object> findAutoloanAccountByClientId(String clientId) {
+        List<Object> result;
         try {
             ResponseEntity<List<AutoLoanAccounts>> autoLoanAccountsResponse =
                     restTemplate.exchange(String.format(autoloanAccountEndPoint, clientId),
                             HttpMethod.GET, null, new ParameterizedTypeReference<List<AutoLoanAccounts>>() {
                             });
-        }catch (Exception ex){
-
+            return (List) autoLoanAccountsResponse.getBody();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            result = new ArrayList<>();
+            result.add("No accounts available to show currently");
+            return result;
         }
-        ResponseEntity<List<CreditAccounts>> creditCardAccountsResponse =
-                restTemplate.exchange(String.format(creditCardEndpoint, clientId),
-                        HttpMethod.GET, null, new ParameterizedTypeReference<List<CreditAccounts>>() {
-                        });
-        ResponseEntity<List<DepositAccounts>> depositAccountsResponse =
-                restTemplate.exchange(String.format(depositAccountEndpoint, clientId),
-                        HttpMethod.GET, null, new ParameterizedTypeReference<List<DepositAccounts>>() {
-                        });
+    }
 
-        return null;
+    private List<Object> findCreditCardByClientId(String clientId) {
+        List<Object> result;
+        try {
+            ResponseEntity<List<CreditAccounts>> creditCardAccountsResponse =
+                    restTemplate.exchange(String.format(creditCardEndpoint, clientId),
+                            HttpMethod.GET, null, new ParameterizedTypeReference<List<CreditAccounts>>() {
+                            });
+            return (List) creditCardAccountsResponse.getBody();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            result = new ArrayList<>();
+            result.add("No accounts available to show currently");
+            return result;
+        }
     }
 }
